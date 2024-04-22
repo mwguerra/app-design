@@ -1,0 +1,7 @@
+// BelongsTo
+
+it('can retrieve the {{relatedModelNameLower}} that owns the {{modelNameLower}}', function () {
+    ${{relatedModelNameLower}} = {{relatedModelName}}::factory()->has{{modelName}}(1)->create();
+    ${{modelNameLower}} = ${{relatedModelNameLower}}->{{relationshipFunctionName}}->first();
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toBeInstanceOf({{relatedModelName}}::class);
+});

@@ -1,0 +1,4 @@
+    public function {{relationshipMethodName}}()
+    {
+        return $this->belongsTo({{RelatedModel}}::class{{foreignKeyParameter}}{{ownerKeyParameter}});
+    }

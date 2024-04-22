@@ -1,0 +1,4 @@
+    public function {{relationshipMethodName}}()
+    {
+        return $this->hasOne({{RelatedModel}}::class{{foreignKeyParameter}}{{localKeyParameter}});
+    }

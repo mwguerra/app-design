@@ -1,0 +1,8 @@
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import IndexContent from './IndexContent.vue'
+</script>
+
+<template>
+    <IndexContent :layout="AppLayout" title="##page_title##" v-bind="$attrs" />
+</template>

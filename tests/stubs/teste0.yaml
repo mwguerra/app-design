@@ -1,0 +1,85 @@
+resources:
+  - name: PaymentHistory
+    title: "Payment History"
+    inertia: true
+    useZiggy: true
+    authentication:
+      system: "jetstream" # Options: "breeze", "jetstream", "none"
+      withTeams: true
+    multiTenancy:
+      enabled: true
+      tenantId: "company_id"
+    vueTemplate: "resources/vue-templates/PaymentHistoryTemplate.vue"
+    props:
+      - name: payments
+        type: Object
+        default: "() => ({})"
+        validationRules: "required|object"
+      - name: message
+        type: String
+        default: "''"
+        validationRules: "required|string|max:255"
+    apiEndpoints:
+      fetch: "paymentHistory.index"
+      create: "paymentHistory.create"
+      update: "paymentHistory.update"
+      delete: "paymentHistory.delete"
+    documentation:
+      description: "Displays and manages payment history records."
+      props:
+        - name: "payments"
+          description: "List of payment records."
+        - name: "message"
+          description: "Notification message for the user."
+      events:
+        - name: "updatePayment"
+          description: "Fired when a payment record is updated."
+      slots:
+        - name: "default"
+          description: "Slot for default content."
+    storybook:
+      stories:
+        - name: "Default"
+          propsData:
+            payments: "[{ id: 1, date: '2022-01-01', amount: 100 }]"
+            message: "Latest payment history."
+        - name: "Empty"
+          propsData:
+            payments: "[]"
+            message: "No payment history available."
+    database:
+      tableName: "payment_histories"
+      columns:
+        - name: "id"
+          type: "bigIncrements"
+        - name: "user_id"
+          type: "unsignedBigInteger"
+          foreignKey: true
+          references: "id"
+          on: "users"
+          onDelete: "cascade"
+        - name: "company_id"
+          type: "unsignedBigInteger"
+          foreignKey: true
+          references: "id"
+          on: "companies"
+          onDelete: "cascade"
+        - name: "amount"
+          type: "decimal"
+          precision: 8
+          scale: 2
+        - name: "payment_date"
+          type: "date"
+        - name: "created_at"
+          type: "timestamp"
+          nullable: true
+        - name: "updated_at"
+          type: "timestamp"
+          nullable: true
+      relationships:
+        - type: "belongsTo"
+          model: "User"
+          foreignKey: "user_id"
+        - type: "belongsTo"
+          model: "Company"
+          foreignKey: "company_id"

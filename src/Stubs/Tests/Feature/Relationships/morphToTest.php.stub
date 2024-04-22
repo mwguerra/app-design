@@ -1,0 +1,11 @@
+// MorphTo
+
+it('can add comments to a {{modelName}} via polymorphic relation', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    $comment = Comment::factory()->create([
+        'commentable_id' => ${{modelNameLower}}->id,
+        'commentable_type' => {{modelName}}::class,
+    ]);
+
+    expect(${{modelNameLower}}->comments)->toHaveCount(1);
+});

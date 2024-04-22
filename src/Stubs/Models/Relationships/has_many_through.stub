@@ -1,0 +1,7 @@
+    public function {{relationshipMethodName}}()
+    {
+        return $this->hasManyThrough(
+            {{RelatedModel}}::class,
+            {{ThroughModel}}::class{{firstKeyParameter}}{{secondKeyParameter}}{{localKeyParameter}}{{secondLocalKeyParameter}}
+        );
+    }

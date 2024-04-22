@@ -1,0 +1,112 @@
+resources:
+  - name: User
+    database:
+      tableName: users
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: name
+          type: string
+        - name: email
+          type: string
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: hasMany
+          model: Post
+          foreignKey: user_id
+
+  - name: Post
+    database:
+      tableName: posts
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: title
+          type: string
+        - name: body
+          type: text
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: User
+          foreignKey: user_id
+        - type: hasMany
+          model: Comment
+          foreignKey: post_id
+        - type: belongsToMany
+          model: Tag
+          table: post_tag
+          foreignPivotKey: post_id
+          relatedPivotKey: tag_id
+
+  - name: Comment
+    database:
+      tableName: comments
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: post_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: body
+          type: text
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: Post
+          foreignKey: post_id
+
+  - name: Tag
+    database:
+      tableName: tags
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: name
+          type: string
+      relationships:
+        - type: belongsToMany
+          model: Post
+          table: post_tag
+          foreignPivotKey: tag_id
+          relatedPivotKey: post_id
+
+  - name: Profile
+    database:
+      tableName: profiles
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: bio
+          type: text
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: User
+          foreignKey: user_id

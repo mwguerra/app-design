@@ -1,0 +1,29 @@
+// MorphMany
+
+it('can add a {{relatedModelNameLower}} via polymorphic relation to a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNameLower}} = {{relatedModelName}}::factory()->create([
+        'imageable_id' => ${{modelNameLower}}->id,
+        'imageable_type' => '{{modelName}}'
+    ]);
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(1);
+});
+
+it('can retrieve all {{relatedModelNamePluralLower}} via polymorphic relation from a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNamePluralLower}} = {{relatedModelName}}::factory()->count(3)->create([
+        'imageable_id' => ${{modelNameLower}}->id,
+        'imageable_type' => '{{modelName}}'
+    ]);
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(3);
+});
+
+it('can delete a {{relatedModelNameLower}} via polymorphic relation from a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNameLower}} = {{relatedModelName}}::factory()->create([
+        'imageable_id' => ${{modelNameLower}}->id,
+        'imageable_type' => '{{modelName}}'
+    ]);
+    ${{relatedModelNameLower}}->delete();
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toBeEmpty();
+});

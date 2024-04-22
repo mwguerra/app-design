@@ -1,0 +1,83 @@
+resources:
+  - name: User
+    database:
+      tableName: users
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: email
+          type: string
+          nullable: false
+          hidden: false
+        - name: password
+          type: string
+          nullable: false
+          hidden: true
+        - name: remember_token
+          type: string
+          nullable: true
+          default: null
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+
+  - name: Post
+    database:
+      tableName: posts
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+          referencesTable: users
+          referencedTableIndexName: user_id_fk
+          onDelete: cascade
+          onUpdate: cascade
+        - name: title
+          type: string
+          nullable: false
+        - name: body
+          type: text
+          nullable: false
+        - name: published_at
+          type: timestamp
+          nullable: true
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+
+  - name: Comment
+    database:
+      tableName: comments
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: post_id
+          type: unsignedBigInteger
+          foreignKey: true
+          referencesTable: posts
+          referencedTableIndexName: post_id_fk
+          onDelete: cascade
+          onUpdate: cascade
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+          referencesTable: users
+          onDelete: set null
+          onUpdate: cascade
+        - name: content
+          type: text
+          nullable: false
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true

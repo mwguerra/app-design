@@ -1,0 +1,39 @@
+<script setup lang="ts">
+    import { ref, onMounted } from 'vue';
+    import { usePage } from '@inertiajs/vue3';
+    import BaseTable from '@/Components/BaseTable.vue';
+    import BasePagination from '@/Components/BasePagination.vue';
+
+    const props = defineProps({
+        layout: Object, // Layout vue component
+        title: String,
+        ##model_plural##: Object,
+        columns: Object
+    });
+</script>
+
+<template>
+    <component :is="layout" :title="title">
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ title }}
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                    <BaseTable
+                        :columns="columns"
+                        :items="##model_plural##.data"
+                        create-route="##model_plural##.create"
+                        show-route="##model_plural##.show"
+                        edit-route="##model_plural##.edit"
+                        delete-route="##model_plural##.destroy"
+                    />
+                    <BasePagination :data="##model_plural##" />
+                </div>
+            </div>
+        </div>
+    </component>
+</template>

@@ -1,0 +1,14 @@
+// ManyToMany
+
+it('can attach {{relatedModelNamePluralLower}} to a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNamePluralLower}} = {{relatedModelName}}::factory()->count(2)->create();
+    ${{modelNameLower}}->{{relationshipFunctionName}}()->attach(${{relatedModelNamePluralLower}}->pluck('id'));
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(2);
+});
+
+it('can detach {{relatedModelNamePluralLower}} from a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->has{{relatedModelNamePluralLower}}(2)->create();
+    ${{modelNameLower}}->{{relationshipFunctionName}}()->detach();
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(0);
+});

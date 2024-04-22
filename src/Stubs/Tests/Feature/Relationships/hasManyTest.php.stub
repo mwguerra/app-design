@@ -1,0 +1,17 @@
+// HasMany
+
+it('can retrieve {{relatedModelNamePluralLower}} for a {{modelName}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNamePluralLower}} = {{relatedModelName}}::factory()->count(3)->create(['{{modelNameLower}}_id' => ${{modelNameLower}}->id]);
+
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(3);
+});
+
+it('can add a {{relatedModelNameLower}} to a {{modelName}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNameLower}} = {{relatedModelName}}::factory()->make();
+
+    ${{modelNameLower}}->{{relationshipFunctionName}}()->save(${{relatedModelNameLower}});
+
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(1);
+});

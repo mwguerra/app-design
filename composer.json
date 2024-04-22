@@ -1,0 +1,67 @@
+{
+    "name": "mwguerra/app-design",
+    "description": "An opinionated Laravel helper command to read a new app structure from a YAML file and create all the basic CRUD structure. For now only for Jetstream Teams with Vue and Inertia.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MWGuerra\\AppDesign\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Marcelo Guerra",
+            "email": "mwguerra@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MWGuerra\\AppDesign\\AppDesignServiceProvider"
+            ],
+            "aliases": {
+                "AppDesign": "MWGuerra\\AppDesign\\Facade"
+            }
+        }
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.34",
+        "orchestra/testbench": "^9.0",
+        "pestphp/pest-plugin-laravel": "^2.3"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "lint": [
+            "@php vendor/bin/phpstan analyse"
+        ],
+        "test": [
+            "@php vendor/bin/pest"
+        ],
+        "test-coverage": "./vendor/bin/pest --coverage"
+    },
+    "require": {
+        "nikic/php-parser": "^5.0",
+        "laravel/prompts": "^0.1.19"
+    }
+}

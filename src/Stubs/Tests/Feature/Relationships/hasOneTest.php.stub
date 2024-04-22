@@ -1,0 +1,12 @@
+// HasOne
+
+it('can retrieve {{relatedModelNamePluralLower}} for a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->has{{relatedModelNamePlural}}(3)->create();
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(3);
+});
+
+it('can add a {{relatedModelNameLower}} to a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{relatedModelNameLower}} = {{relatedModelName}}::factory()->create(['{{modelNameLower}}_id' => ${{modelNameLower}}->id]);
+    expect(${{modelNameLower}}->{{relationshipFunctionName}})->toHaveCount(1);
+});

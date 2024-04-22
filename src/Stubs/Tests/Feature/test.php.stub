@@ -1,0 +1,35 @@
+<?php
+
+use App\Models\{{modelName}};
+
+// CRUD
+
+it('can create a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    $this->assertDatabaseHas('{{modelNameLower}}s', ['id' => ${{modelNameLower}}->id]);
+});
+
+it('can read a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    $found{{modelName}} = {{modelName}}::find(${{modelNameLower}}->id);
+    expect($found{{modelName}}->id)->toEqual(${{modelNameLower}}->id);
+});
+
+it('can update the updated_at timestamp of a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create([
+        'updated_at' => now()->subDay()
+    ]);
+
+    $originalUpdatedAt = ${{modelNameLower}}->updated_at;
+    ${{modelNameLower}}->touch();
+    ${{modelNameLower}}->refresh();
+
+    expect(${{modelNameLower}}->updated_at)->toBeGreaterThan($originalUpdatedAt);
+});
+
+it('can delete a {{modelNameLower}}', function () {
+    ${{modelNameLower}} = {{modelName}}::factory()->create();
+    ${{modelNameLower}}Id = ${{modelNameLower}}->id;
+    ${{modelNameLower}}->delete();
+    $this->assertDatabaseMissing('{{modelNameLower}}s', ['id' => ${{modelNameLower}}Id]);
+});

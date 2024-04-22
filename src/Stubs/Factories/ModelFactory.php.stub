@@ -1,0 +1,23 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory; {{relationships}}
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\{{modelName}}>
+ */
+class {{factoryClassName}} extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+{{definition}}
+        ];
+    }
+}

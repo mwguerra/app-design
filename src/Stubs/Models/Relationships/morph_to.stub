@@ -1,0 +1,4 @@
+    public function {{relationshipMethodName}}()
+    {
+        return $this->morphTo({{nameParameter}}{{typeParameter}}{{idParameter}});
+    }

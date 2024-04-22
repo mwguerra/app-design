@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\User;
+use App\Models\##model_name##;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Laravel\Jetstream\Jetstream;
+
+class ##model_name##Policy
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any ##model_plural##.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
+        // If needed, you can implement logic here for listing all ##model_plural## a user can see.
+        // This example does not directly support viewing any ##model_singular## without team context.
+        return false;
+    }
+
+    /**
+     * Determine whether the user can view the ##model_singular##.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\##model_name##  $##model_singular##
+     * @return mixed
+     */
+    public function view(User $user, ##model_name## $##model_singular##)
+    {
+        return $user->belongsToTeam($##model_singular##->team) && $user->hasTeamPermission($##model_singular##->team, 'read');
+    }
+
+    /**
+     * Determine whether the user can create ##model_plural##.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        // Assuming users can create ##model_plural## if they are part of any team.
+        // Adjust logic as needed for your application's requirements.
+        return $user->currentTeam !== null;
+    }
+
+    /**
+     * Determine whether the user can update the ##model_singular##.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\##model_name##  $##model_singular##
+     * @return mixed
+     */
+    public function update(User $user, ##model_name## $##model_singular##)
+    {
+        return $user->belongsToTeam($##model_singular##->team) && $user->hasTeamPermission($##model_singular##->team, 'update');
+    }
+
+    /**
+     * Determine whether the user can delete the ##model_singular##.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\##model_name##  $##model_singular##
+     * @return mixed
+     */
+    public function delete(User $user, ##model_name## $##model_singular##)
+    {
+        return $user->belongsToTeam($##model_singular##->team) && $user->hasTeamPermission($##model_singular##->team, 'delete');
+    }
+
+    /**
+     * Determine whether the user can restore the ##model_singular##.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\##model_name##  $##model_singular##
+     * @return mixed
+     */
+    public function restore(User $user, ##model_name## $##model_singular##)
+    {
+        return $user->belongsToTeam($##model_singular##->team) && $user->hasTeamPermission($##model_singular##->team, 'delete');
+    }
+
+    /**
+     * Determine whether the user can permanently delete the ##model_singular##.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\##model_name##  $##model_singular##
+     * @return mixed
+     */
+    public function forceDelete(User $user, ##model_name## $##model_singular##)
+    {
+        // Assuming "force delete" is a more restricted action than a regular delete.
+        // Adjust permissions as necessary for your application.
+        return $user->belongsToTeam($##model_singular##->team) && $user->hasTeamPermission($##model_singular##->team, 'delete');
+    }
+}

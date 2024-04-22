@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\##model_name##;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Http\Resources\##model_name##Resource;
+use App\Http\Resources\##model_name##Collection;
+use App\Http\Requests\##model_name##StoreRequest;
+use App\Http\Requests\##model_name##UpdateRequest;
+use Illuminate\Support\Facades\Redirect;
+use App\Services\ModelService;
+
+class ##model_name##Controller extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        auth()->user()->can('viewAny', ##model_name##::class);
+
+        $##model_plural## = ##model_name##::query()->paginate(10);
+        $columns = ModelService::getColumnsFor(new ##model_name##());
+
+        return Inertia::render('##model_name##/Index', [
+            '##model_plural##' => new ##model_name##Collection($##model_plural##),
+            'columns' => $columns,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        auth()->user()->can('create', ##model_name##::class);
+
+        // Assuming '##model_name##/Create' is your Inertia component for creating ##model_plural##
+        return Inertia::render('##model_name##/Create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(##model_name##StoreRequest $request)
+    {
+        auth()->user()->can('create', ##model_name##::class);
+
+        ##model_name##::create($request->validated());
+
+        return Redirect::route('##model_plural##.index')->with('message', '##model_name## created successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(##model_name## $##model_singular##)
+    {
+        auth()->user()->can('view', $##model_singular##);
+
+        return Inertia::render('##model_name##/Show', [
+            '##model_singular##' => new ##model_name##Resource($##model_singular##),
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(##model_name## $##model_singular##)
+    {
+        auth()->user()->can('update', $##model_singular##);
+
+        return Inertia::render('##model_name##/Edit', [
+            '##model_singular##' => $##model_singular##,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(##model_name##UpdateRequest $request, ##model_name## $##model_singular##)
+    {
+        auth()->user()->can('update', $##model_singular##);
+
+        $##model_singular##->update($request->validated());
+
+        return Redirect::route('##model_plural##.index')->with('message', '##model_name## updated successfully.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(##model_name## $##model_singular##)
+    {
+        auth()->user()->can('delete', $##model_singular##);
+
+        $##model_singular##->delete();
+
+        return Redirect::route('##model_plural##.index')->with('message', '##model_name## deleted successfully.');
+    }
+}

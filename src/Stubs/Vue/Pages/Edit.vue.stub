@@ -1,0 +1,8 @@
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import EditContent from './EditContent.vue'
+</script>
+
+<template>
+    <EditContent :layout="AppLayout" title="##page_title##" v-bind="$attrs" />
+</template>

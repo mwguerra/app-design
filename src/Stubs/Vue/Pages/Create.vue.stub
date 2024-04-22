@@ -1,0 +1,8 @@
+<script setup>
+    import AppLayout from '@/Layouts/AppLayout.vue';
+    import CreateContent from './CreateContent.vue'
+</script>
+
+<template>
+    <CreateContent :layout="AppLayout" title="##page_title##" v-bind="$attrs" />
+</template>

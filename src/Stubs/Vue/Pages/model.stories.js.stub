@@ -1,0 +1,58 @@
+import AppLayoutMock from '../../../../.storybook/mocks/AppLayoutMock.vue'
+import VueIndexContent from './IndexContent.vue';
+import VueCreateContent from './CreateContent.vue';
+import VueEditContent from './EditContent.vue';
+import VueShowContent from './ShowContent.vue';
+
+export default {
+    title: "##title##",
+    component: VueIndexContent
+};
+
+const TemplateIndex = (args) => ({
+    components: { AppLayoutMock, VueIndexContent },
+    setup() { return { args, AppLayoutMock }; },
+    template: '<VueIndexContent v-bind="args" :layout="AppLayoutMock" title="Index">Index</VueIndexContent>',
+});
+
+const TemplateCreate = (args) => ({
+    components: { AppLayoutMock, VueCreateContent },
+    setup() { return { args, AppLayoutMock }; },
+    template: '<VueCreateContent v-bind="args" :layout="AppLayoutMock" title="Create">Create</VueCreateContent>',
+});
+
+const TemplateEdit = (args) => ({
+    components: { AppLayoutMock, VueEditContent },
+    setup() { return { args, AppLayoutMock }; },
+    template: '<VueEditContent v-bind="args" :layout="AppLayoutMock" title="Edit">Edit</VueEditContent>',
+});
+
+const TemplateShow = (args) => ({
+    components: { AppLayoutMock, VueShowContent },
+    setup() { return { args, AppLayoutMock }; },
+    template: '<VueShowContent v-bind="args" :layout="AppLayoutMock" title="Show">Show</VueShowContent>',
+});
+
+export const Index = TemplateIndex.bind({});
+Index.args = {
+    primary: true,
+    label: 'Index',
+};
+
+export const Create = TemplateCreate.bind({});
+Create.args = {
+    primary: true,
+    label: 'Create',
+};
+
+export const Edit = TemplateEdit.bind({});
+Edit.args = {
+    primary: true,
+    label: 'Edit',
+};
+
+export const Show = TemplateShow.bind({});
+Show.args = {
+    primary: true,
+    label: 'Show',
+};

@@ -1,0 +1,282 @@
+app:
+  name: MyLaravelApp
+  description: A user management and blogging platform
+  version: 1.0.0
+  frontend:
+    framework: vue  # or react, inertia
+  auth:
+    type: jetstream  # or breeze, none
+    teams: true  # If using Jetstream with Teams
+  multitenancy:
+    enabled: true
+    tenant_table: tenants
+    tenant_id_field: tenant_id
+
+users:
+  - name: Marcelo W Guerra
+    email: mwguerra@gmail.com
+    password: 12345678
+teams:
+  roles:
+    - name: admin
+      description: Full administrative access to the team.
+      permissions:
+        - '*'  # Full access to all team actions
+    - name: editor
+      description: Can create and edit content within the team.
+      permissions:
+        - create-posts
+        - edit-posts
+        - manage-comments
+    - name: member
+      description: Basic team member with read-only access.
+      permissions:
+        - view-posts
+  global:
+    - name: Global App Team
+      slug: global_app_team
+      owner: mwguerra@gmail.com
+  users-default:
+    - show_own_team: true
+    - can_delete_own_team: false
+    - can_create_more_teams: true
+    - add-to-global-teams:
+      - slug: global_app_team
+        role: member
+
+
+
+menus:
+  main:
+    - name: Dashboard
+      route: home
+      icon: home
+      team_permissions: [] # Likely accessible to all team members
+    - name: Users
+      route: users.index
+      team_permissions:
+        - manage-users # Only admins likely
+    - name: Posts
+      route: posts.index
+      team_permissions:
+        - create-posts
+        - edit-posts
+        - view-posts  # Perhaps also for members
+    - name: Team Settings  # Example
+      route: teams.settings
+      team_permissions:
+        - update-team-settings # Likely admins and potentially editors
+resources:
+  - name: User
+    showInMenu: true
+    menuType: main # main or user
+    description: Represents an authenticated user of the application
+    database:
+      tableName: users
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: team_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: name
+          type: string
+          validation:
+            - required
+            - string
+            - max:255
+        - name: email
+          type: string
+          unique: true
+          validation:
+            - required
+            - email
+            - unique:users
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: hasMany
+          model: Post
+          foreignKey: user_id
+  - name: Post
+    showInMenu: true
+    menuType: main # main or user
+    database:
+      tableName: posts
+      description: Represents a post created by an user of the application
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: team_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+          validation:
+            - required
+            - integer
+            - exists:users,id
+        - name: title
+          type: string
+          validation:
+            - required
+            - string
+            - max:255
+        - name: body
+          type: text
+          validation:
+            - required
+            - string
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: User
+          foreignKey: user_id
+        - type: hasMany
+          model: Comment
+          foreignKey: post_id
+        - type: belongsToMany
+          model: Tag
+          table: post_tag
+          foreignPivotKey: post_id
+          relatedPivotKey: tag_id
+          withPivot:
+            - name: assigned_at  # Extra data in pivot table
+              type: timestamp
+        - type: morphMany
+          model: Image
+          as: imageable
+  - name: Comment
+    showInMenu: true
+    menuType: main # main or user
+    description: Represents a comment created by an user
+    database:
+      tableName: comments
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: team_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: post_id
+          type: unsignedBigInteger
+          foreignKey: true
+          validation:
+            - required
+            - integer
+            - exists:posts,id
+        - name: body
+          type: text
+          validation:
+            - required
+            - string
+            - max:1000
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: Post
+          foreignKey: post_id
+          relationships:
+        - type: morphMany
+          model: Image
+          as: imageable
+  - name: Tag
+    showInMenu: true
+    menuType: main # main or user
+    description: Represents a tag for a post created by an user
+    database:
+      tableName: tags
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: name
+          type: string
+          unique: true
+          validation:
+            - required
+            - string
+            - max:50
+            - unique:tags
+      relationships:
+        - type: belongsToMany
+          model: Post
+          table: post_tag
+          foreignPivotKey: tag_id
+          relatedPivotKey: post_id
+          withPivot:
+            - name: assigned_at  # Extra data in pivot table
+              type: timestamp
+  - name: Profile
+    showInMenu: true
+    menuType: main # main or user
+    description: Represents a user's profile
+    database:
+      tableName: profiles
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: team_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: user_id
+          type: unsignedBigInteger
+          foreignKey: true
+          validation:
+            - required
+            - integer
+            - exists:users,id
+        - name: bio
+          type: text
+          validation:
+            - nullable
+            - string
+            - max:500
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
+      relationships:
+        - type: belongsTo
+          model: User
+          foreignKey: user_id
+  - name: Image
+    description: Represents an image that can be attached to posts or comments
+    database:
+      tableName: images
+      columns:
+        - name: id
+          type: bigIncrements
+        - name: team_id
+          type: unsignedBigInteger
+          foreignKey: true
+        - name: url
+          type: string
+          storage: local  # Or 's3', 'cloudinary', etc.
+          path_prefix: uploads/images # Or adjust as needed
+        - name: imageable_id
+          type: unsignedBigInteger
+        - name: imageable_type
+          type: string
+        - name: created_at
+          type: timestamp
+          nullable: true
+        - name: updated_at
+          type: timestamp
+          nullable: true
