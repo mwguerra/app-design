@@ -6,14 +6,30 @@ const props = defineProps({
     layout: Object, // Layout vue component
     title: String
 });
+
+const handleBackToIndex = () => {
+    router.visit(route('##model_plural##.index'));
+}
 </script>
 
 <template>
     <component :is="layout" :title="title">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ title }}
-            </h2>
+            <div class="flex items-center gap-4">
+                <button
+                        type="button"
+                        class="inline-flex items-center rounded-md stroke-indigo-600 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        @click="handleBackToIndex"
+                >
+                    <!-- Chevron Left Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ title }}
+                </h2>
+            </div>
         </template>
 
         <div class="py-12">
