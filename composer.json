@@ -1,6 +1,6 @@
 {
     "name": "mwguerra/app-design",
-    "description": "An opinionated Laravel helper command to read a new app structure from a YAML file and create all the basic CRUD structure. For now only for Jetstream Teams with Vue and Inertia.",
+    "description": "An opinionated Laravel artisan command to read a new app structure from a YAML file and create all the basic CRUD structure. For now only for Jetstream Teams with Vue and Inertia.",
     "type": "library",
     "license": "MIT",
     "autoload": {
