@@ -14,12 +14,18 @@ class ProcessResources extends Command
                             {--seed : Seed the database after migration}
                             {--dependencies : Install dependencies after processing}
                             {--commit : Commit changes after processing}
-                            {--composer-scripts : Add or update Composer scripts}';
+                            {--composer-scripts : Add or update Composer scripts}
+                            {--use-example-yaml : Use a fixed example yaml file for processing}';
 
     protected $description = 'Processes a YAML file to generate migration files, models, and optionally seeds database, installs dependencies, commits changes, and updates Composer scripts.';
 
     public function handle(): void {
         $filePath = $this->argument('file');
+        if ($this->option('use-example-yaml')) {
+            $basePackagePath = dirname(__DIR__, 2);
+            $filePath = $basePackagePath . "/tests/stubs/teste3.yaml";
+        }
+
         $dryRun = $this->option('dry-run');
         $shouldSeed = $this->option('seed');
         $installDependencies = $this->option('dependencies');
@@ -101,7 +107,20 @@ class ProcessResources extends Command
         }
 
         $this->call('migrate:fresh', $options);
-        Process::command("npm run build");
+
+        $this->runNpmBuild();
+
         $this->info("Database migrated and JS resources built.");
+    }
+
+    protected function runNpmBuild(): void
+    {
+        $this->info("Running npm build...");
+        exec("npm run build", $output, $return_var);
+        if ($return_var !== 0) {
+            $this->error("Failed to run npm build.");
+        } else {
+            $this->info("npm build executed successfully.");
+        }
     }
 }
